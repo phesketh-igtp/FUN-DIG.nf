@@ -1,1 +1,1 @@
-# CanRuti_ONT-fungal-diagnostics
+# CanRuti: ONT Fungal Diagnostics
