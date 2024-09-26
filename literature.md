@@ -6,9 +6,6 @@
 
 <u>**Methods:**</u>
 - Primers:
-    1. V3 region of 18S to D3 of the 28S (~3,500 bp len)
-    2. 
-
-|Name|Sequence (5'-3')|Target|Amplicon|Ref|
-||||||
-|SSU515Fngs-F|||||
+    1. V3 region of 18S to D3 region of the 28S (~3,500 bp len)
+    2. V1 region of 18S to D12 region of 28S  gene (~6000 bp len)
+- 
