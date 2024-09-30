@@ -6,28 +6,22 @@
 
 Help()
 {
-echo -e "prefiler-read.sh"
+echo -e "BLASTn classification of final assemblies"
 echo -e "Required flags:"
-echo -e "   -a  The A thing"
-echo -e "   -b  The B thing"
-echo -e "Optional flags:"
-echo -e "   -c  The C thing (default : -c 2)"
-echo -e "   -h  Print this help message and exit."
-echo -e "Example:"
-echo -e "e.g. bash myscript.sh -a /path/to/A.thing -b "The B thing" -c 5 "
+echo -e "   -i, --input Final funal 18S assemblies for taxonomic classification"
+echo -e "   -o, --output  Output file name"
 }
 
 ################################################################################
 
 #······· Define flags/arguments/parameters ········#
 
-while getopts c:s:o:m:h option
+while getopts i:o:r:h option
 do 
     case "${option}" in 
-        c)CENTROIDS=${OPTARG};;
-        s)SUBREADS=${OPTARG};;
+        i)INPUT=${OPTARG};;
         o)OUTPUT=${OPTARG};;
-        m)MODEL=${OPTARG};;
+        r)REFERENCE
         h)Help; exit;;
     esac
 done
@@ -35,12 +29,10 @@ done
 ################################################################################
 
 ## REQUIRED arguments
-if [[ -z "${CENTROIDS}" ]]; then echo -e "ERROR: -i/--input file is missing"; Help, exit 1; fi
-if [[ -z "${SUBREADS}" ]]; then echo -e "ERROR: -m/--mindepth value is missing"; Help, exit 1; fi
+if [[ -z "${INPUT}" ]]; then echo -e "ERROR: -i/--input file is missing"; Help, exit 1; fi
 if [[ -z "${OUTPUT}" ]]; then echo -e "ERROR: -o/--output file name is missing"; Help, exit 1; fi
 
 ## OPTIONAL arguments
-if [[ -z "${MODEL}" ]]; then MODEL=model; echo -e "No model specified, defaulting to ${MODEL}"; fi
 
 ################################################################################
 
@@ -53,7 +45,12 @@ conda activate fungal-18S
 
 #······· Main ········#
 
-makeblastdb -in [assemblies.fna] -out [database title] -dbtype nucl -hash_index -parse_seqids
+# Make BLASTn database of assemblies
+rm reference.database
+makeblastdb -in ${REFERENCE} -out reference.database -dbtype nucl -hash_index -parse_seqids
+
+# BLASTn consensus sequences against the reference database
+blastn -query ${INPUT} -db reference.database -out ${OUTPUT} -outfmt "6 saccver qcovs bitscore nident mismatch gaps pident evalue"
 
 ################################################################################
 
