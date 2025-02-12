@@ -76,7 +76,7 @@ nextflow.enable.dsl = 2
         def color_reset  = '\u001B[0m'
         def color_cyan   = '\u001B[36m'
 
-    // Create channel from sample sheet
+    // Create channel with the paths to each directory containing fastQs
 
         
 
