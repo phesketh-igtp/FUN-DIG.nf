@@ -1,6 +1,6 @@
 process runReadQC {
 
-    tag "$sampleId"
+    tag "${sampleID}"
     
     input:
         tuple val(sampleID), 

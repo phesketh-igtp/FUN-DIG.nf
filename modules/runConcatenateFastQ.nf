@@ -9,7 +9,8 @@ process runConcatenateFastQ {
     path(samplesheet)
 
     output:
-    tuple val(newSampleID), path("${newSampleID}.fastq.gz"), emit: concatenated_fastq
+    tuple val(newSampleID), 
+            path("${newSampleID}.fastq.gz"), emit: concatenated_fastq
 
     script:
     // Check if samplesheet exists and get new sample ID if it does

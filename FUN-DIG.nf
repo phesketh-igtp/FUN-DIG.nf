@@ -21,7 +21,7 @@ nextflow.enable.dsl = 2
     /*
         IMPORT MODULES
     */
-    include { runConcatenateFastQ   }   from '.modules/runConcatenateFastQ.nf'
+    include { runConcatenateFastQ   }   from './modules/runConcatenateFastQ.nf'
     include { runReadQC             }   from './modules/runReadQC.nf'
     include { runReadClustering     }   from './modules/runReadClustering.nf'
     include { runGenConsensus       }   from './modules/runGenConsensus.nf'
@@ -101,9 +101,6 @@ nextflow.enable.dsl = 2
 
     // Cluster reads 
         runReadClustering(runReadQC.out.trimmed_reads_ch)
-
-    // Generate consensus sequences
-        runGenConsensus(runReadClustering.out.clustered_reads_ch)
 
     // Generate consensus sequences
         runGenConsensus(runReadClustering.out.clustered_reads_ch)
