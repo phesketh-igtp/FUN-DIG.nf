@@ -15,14 +15,7 @@ nextflow.enable.dsl = 2
     /*
         IMPORT MODULES
     */
-    include { runTrimGalore  }  from './modules/runTrimGalore.nf'
-    include { runfastQC      }  from './modules/runfastQC.nf'
-    include { getReadStats   }  from './modules/getReadStats.nf'
-    include { runMultiQC     }  from './modules/runMultiQC.nf'
-    include { runHydra       }  from './modules/runHydra.nf'
-    include { runSierralocal }  from './modules/runSierralocal.nf'
-    include { renderReport   }  from './modules/renderReport.nf'
-    include { getVersions    }  from './modules/getVersions.nf'
+    include { runReadQC  }  from './modules/runReadQC.nf'
 
     /*
     ······································································································
@@ -82,25 +75,7 @@ nextflow.enable.dsl = 2
         def color_reset  = '\u001B[0m'
         def color_cyan   = '\u001B[36m'
 
-    
-
-        // Create channel from sample sheet
-            if (params.samplesheet == null) {
-                error "Please provide a samplesheet CSV file with --samplesheet (csv)"
-            }
-
-        // Create channel from sample sheet
-            if (params.runID == null) {
-                error "Please provide a runID file with --runID (chr)"
-            }
-
-            if (params.outdir == null) {
-                error "Please provide a runID file with --name (chr)"
-            }
-
-                if (params.workDir == null) {
-                error "Please provide a runID file with --name (chr)"
-            }
+    // Create channel from sample sheet
 
         
 
@@ -112,69 +87,5 @@ nextflow.enable.dsl = 2
                 two sets of samples are directed into seperate workflows.
     ······································································································
     */
-
-    Channel.fromPath(params.samplesheet)
-                    .splitCsv(header: true, sep: ',')
-                    .map { row ->
-                        def requiredColumns = ['sampleID', 'forward', 'reverse', 'type']
-                        def missingColumns = requiredColumns.findAll { !row.containsKey(it) }
-                        if (missingColumns) {
-                            error "Missing required column(s) in samplesheet: ${missingColumns.join(', ')}"
-                        }
-                        tuple(row.sampleID.trim(), 
-                            file(row.forward.trim(), checkIfExists: true), 
-                            file(row.reverse.trim(), checkIfExists: true), 
-                            row.type.trim()
-                        )
-                    }
-                    .branch {
-                        sample: it[3] == 'sample'
-                        control: it[3] == 'control'
-                    }
-                    .set { branched_samples_by_type }
-
-        samples_ch   = branched_samples_by_type.sample
-        controls_ch  = branched_samples_by_type.control
-
-    /*
-    ······································································································
-        MAIN WORKFLOW
-    ······································································································
-    */
-        // Produce version control files
-            getVersions( params.runID )
-
-        // Run TimGalore on the reads
-            runTrimGalore( params.runID, samples_ch )
-
-        // Run FastQC
-            runfastQC( params.runID, runTrimGalore.out.trimmed_reads_ch )
-
-                // Collect all the samples for running MultiQC
-                    multiqc_zips = runfastQC.out.fastqc_zips.collect()
-                    multiqc_htmls = runfastQC.out.fastqc_htmls.collect()
-
-            getReadStats( params.runID,runTrimGalore.out.trimmed_reads_ch )
-
-        // Run MultiQC
-            runMultiQC( params.runID, multiqc_zips, multiqc_htmls )
-
-        // Run Hydra on the reads
-            runHydra( params.runID, runTrimGalore.out.trimmed_reads_ch )
-
-        // Run SierraLocal on the reads
-            runSierralocal( params.runID, runHydra.out.cns_sequence )
-        
-        // Merge the channels for the final_report_ch
-        //runHydra.out.report_ch.view()
-        //runSierralocal.out.report_ch.view()
-            merged_reports_ch = getReadStats.out.report_ch
-                                    .join(runHydra.out.report_ch)
-                                    .join(runSierralocal.out.report_ch)
-
-        // Render the HTML output
-            renderReport( params.runID, 
-                            getVersions.out.versions,
-                            merged_reports_ch )
 
     }
