@@ -1,1 +1,1 @@
-# CanRuti: ONT Fungal Diagnostics
+# HuGTiP_FUN-DIG: Fungal diagnostics using ONT sequencing technology
