@@ -9,6 +9,7 @@ nextflow.enable.dsl = 2
                 A Nextflow pipeline for analysis of ONT-amplicon data for the 
                 detection of fungal strains.
 
+    Concatenate the reads into a single file
     Filter read to retain high-quality reads (Quality-score > 15, 97% accuracy) (seqkit)
     Cluster reads at 90% nucleotide identity (VSEARCH)
     Generate consensus for each cluster (Medaka, MiniMap2, SAMtools)
@@ -20,6 +21,7 @@ nextflow.enable.dsl = 2
     /*
         IMPORT MODULES
     */
+    include { runConcatenateFastQ   }   from '.modules/runConcatenateFastQ.nf'
     include { runReadQC             }   from './modules/runReadQC.nf'
     include { runReadClustering     }   from './modules/runReadClustering.nf'
     include { runGenConsensus       }   from './modules/runGenConsensus.nf'
@@ -77,8 +79,42 @@ nextflow.enable.dsl = 2
         def color_cyan   = '\u001B[36m'
 
     // Create channel with the paths to each directory containing fastQs
+        Channel
+            .fromPath("${params.readsPath}/*", type: 'dir')
+            .map { dir ->
+                def sampleID = dir.name
+                def reads = file("${dir}/*.fastq*")
+                return tuple(sampleID, reads)
+            }
+            .set { samples_ch }
 
-        
+        samples_ch.view()
+
+    // Concatenate reads and rename (if the samplesheet has been provided)
+        runConcatenateFastQ(samples_ch, params.samplesheet)
+    
+        // You can now use the concatenated_fastq channel in subsequent processes
+        runConcatenateFastQ.out.concatenated_fastq.view()
+
+    // Perform ReadQC
+        runReadQC(runConcatenateFastQ.out.concatenated_fastq)
+
+    // Cluster reads 
+        runReadClustering(runReadQC.out.trimmed_reads_ch)
+
+    // Generate consensus sequences
+        runGenConsensus(runReadClustering.out.clustered_reads_ch)
+
+    // Generate consensus sequences
+        runGenConsensus(runReadClustering.out.clustered_reads_ch)
+
+    // Taxonomically classify conensus sequences
+        runConsensusTax(runGenConsensus.out.conensus_sequences_ch)
+
+    // Compile results summary
+        genResultsTables(runConsensusTax.out.blastn_out_ch)
+
+    // Version control
 
     /*
     ······································································································
