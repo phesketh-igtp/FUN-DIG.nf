@@ -46,28 +46,18 @@ nextflow.enable.dsl = 2
         
         Mandatory arguments:
             --name                  [chr]   Name of the run.
-            --samplesheet           [chr]   Path to input data samplesheet (must be a csv with 4 columns: sampleID,forward,reverse,type)
-                                                sampleID        - name of sample
-                                                forward/reverse - complete paths to the read files
-                                                type            - sample or control.
-            --amplicon_lengths      [tup]     
+            --readsPath             [chr]   Path to directory contaiing reads (but be in their own directory i.e. barcode01/; barcode02/)
+            --amplicon_lengths      [tup]   Range of expected amplicon lengths (defaults: '[1500,1400,2000]')
 
         Read QC arguments (optional):
-            --mQ		            [num]   Minimum quality of ONT reads (default: 10)
-            --reporting_threshold	[num]   Minimum mutation frequency percent to report (default: 1).
-            --consensus_pct		    [num]   Minimum percentage a base needs to be incorporated into the consensus sequence (default: 20).
-            --min_read_qual	        [num]   Minimum quality for a position in a read to be masked (default: 30).
-            --length_cutoff	        [num]   Reads which fall short of the specified length will be filtered out (default: 50).
-            --score_cutoff		    [num]   Reads that have a median or mean quality score (depending on the score type specified) less than the score cutoff value will be filtered out (default: 30).
-            --min_variant_qual      [num]   Minimum quality for variant to be considered later on in the pipeline (default: 30).
-            --min_dp                [num]   Minimum required read depth for variant to be considered later on in the pipeline (default: 100).
-            --min_ac                [num]   The minimum required allele count for variant to be considered later on in the pipeline (default: 5).
-            --min_freq              [num]   The minimum required frequency for mutation to be considered in drug resistance report (default: 0.2).
+            --minimumQuality        [num]   Minimum quality of ONT reads (default: 10)
+            --samplesheet           [chr]   Path to input data samplesheet (must be a csv with 4 columns: sampleID,forward,reverse,type)
+                                                barcode         - barcode number (i.e. barcode01, barcode02)
+                                                sampleID        - name of sample
+                                                type            - sample or control.
 
         Read clustering and centroid generation:
-            --xml                           Path to HIVdb ASI2 XML.
-            --apobec-tsv                    Path to tab-delimited (tsv) HIVdb APOBEC DRM file.
-            --comments-tsv                  Path to tab-delimited (tsv) HIVdb comments file.
+            --clusteringPercentage  [num]   Percentage nucleotide identity for read clsutering (default: 90)
         
         """.stripIndent()
     }
