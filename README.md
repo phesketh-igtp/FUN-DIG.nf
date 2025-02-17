@@ -1,1 +1,1 @@
-# HuGTiP_FUN-DIG: Fungal diagnostics using ONT sequencing technology
+# FUN-DIG.nf: Fungal diagnostics using ONT sequencing technology
