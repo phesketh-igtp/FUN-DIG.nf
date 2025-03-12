@@ -17,7 +17,7 @@ process runReadClustering {
         """
         # Cluster qc reads into centroids
             vsearch --cluster_fast \\
-                    --id ${params.clusteringPercentage} \\
+                    --id ${params.clusteringPerc} \\
                     --strand both \\
                     --clusters ${sampleID}.clusters.txt \\
                     --centroids ${sampleID}.clusters.fasta \\

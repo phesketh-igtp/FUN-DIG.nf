@@ -2,18 +2,20 @@
 nextflow.enable.dsl = 2
 
     /*
-    ========================================================================================
-    O N - F U N - D I G : Oxford Nanopore technology FUNgal DIagnostics OF ONT AMPLICON DATA
-    ========================================================================================
-                
-                A Nextflow pipeline for analysis of ONT-amplicon data for the 
-                detection of fungal strains.
+    ==========================================================================================
+        F U N - D I G : Oxford Nanopore technology FUNgal DIagnostics OF ONT AMPLICON DATA
+    ==========================================================================================
 
-    Concatenate the reads into a single file
-    Filter read to retain high-quality reads (Quality-score > 15, 97% accuracy) (seqkit)
-    Cluster reads at 90% nucleotide identity (VSEARCH)
-    Generate consensus for each cluster (Medaka, MiniMap2, SAMtools)
-    Taxonomically classify each consensus sequences with BLASTn against RefSeq non-redundant database (BLAST)
+        A Nextflow pipeline for analysis of ONT-amplicon reads for the 
+                classification of fungal strains.
+
+        The workflow is as follows:
+            1. Concatenate the reads into a single file (if the MinION data path is provided)
+            2. Filter read to retain high-quality reads (default: Quality-score > 10, 97% accuracy) (seqkit)
+            3. Cluster reads at 90% nucleotide identity (VSEARCH)
+            5. Generate consensus for each cluster centroid (Medaka, MiniMap2, SAMtools)
+            6. Taxonomically classify consensus sequences with BLASTn against RefSeq non-redundant database (BLAST)
+            7. Produce summary results of the samples.
 
     ----------------------------------------------------------------------------------------
     */
@@ -47,11 +49,11 @@ nextflow.enable.dsl = 2
             nextflow run HUGTiP-HIV-1.nf/main.nf --samplesheet <samplesheet> --runID <name of run>
         
         Mandatory arguments:
-            --name                  [chr]   Name of the run.
+            --name                  [chr]   Name of the run (a unique identifier).
             --readsPath             [chr]   Path to directory contaiing reads (but be in their own directory i.e. barcode01/; barcode02/)
-            --amplicon_lengths      [tup]   Range of expected amplicon lengths (defaults: '[1500,1400,2000]')
 
         Read QC arguments (optional):
+            --amplicon_lengths      [tup]   Range of expected amplicon lengths (defaults: '[1500,1400,2000]')
             --minimumQuality        [num]   Minimum quality of ONT reads (default: 10)
             --samplesheet           [chr]   Path to input data samplesheet (must be a csv with 4 columns: sampleID,forward,reverse,type)
                                                 barcode         - barcode number (i.e. barcode01, barcode02)
