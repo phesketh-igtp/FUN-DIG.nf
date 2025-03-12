@@ -40,7 +40,7 @@ nextflow.enable.dsl = 2
         log.info"""
 
         ============================================================
-        onFUN-DIG.nf  ~  version ${params.version}
+                FUN-DIG.nf  ~  version:${params.version}
         ============================================================
         Usage:
 
@@ -61,7 +61,7 @@ nextflow.enable.dsl = 2
                                                 type            - sample or control.
 
         Read clustering and centroid generation:
-            --clusteringPercentage  [num]   Percentage nucleotide identity for read clsutering (default: 90)
+            --clusteringPerc        [num]   Percentage nucleotide identity for read clsutering (default: 0.95)
         
         """.stripIndent()
     }
@@ -124,4 +124,4 @@ nextflow.enable.dsl = 2
     ······································································································
     */
 
-    }
+}
