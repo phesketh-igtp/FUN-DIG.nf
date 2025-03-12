@@ -1,17 +1,17 @@
 process runGenConsensus {
 
-    tag "${sampleID}"
-    
-    input:
-        tuple val(sampleID),
-                path(reads),
-                path(centroids)
+        tag "${sampleID}"
 
-    output:
-        tuple val(sampleID),
-                path("${sampleID}.cns.fasta")
+        input:
+                tuple val(sampleID),
+                        path(reads),
+                        path(centroids)
 
-    script:
+        output:
+                tuple val(sampleID),
+                        path("${sampleID}.cns.fasta"), emit: conensus_sequences_ch
+
+        script:
 
         """
         # Create consensus with medaka

@@ -10,7 +10,7 @@ process runReadClustering {
     output:
         tuple val(sampleID),
                 path(reads),
-                path("${sampleID}.clusters.fasta")
+                path("${sampleID}.clusters.fasta"), emit: clustered_reads_ch
 
     script:
 
