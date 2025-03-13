@@ -1,6 +1,14 @@
 # FUN-DIG.nf: Fungal diagnostics using ONT sequencing technology
 
-This Nexus workflow is based on the 
+A Nextflow pipeline for analysis of ONT-amplicon reads for the classification of fungal strains.
+
+The workflow is as follows:
+1. Concatenate the reads into a single file (if the MinION data path is provided)
+ 2. Filter read to retain high-quality reads (default: Quality-score > 10, 97% accuracy) (seqkit)
+ 3. Cluster reads at 90% nucleotide identity (VSEARCH)
+ 4. Generate consensus for each cluster centroid (Medaka, MiniMap2, SAMtools)
+ 5. Taxonomically classify consensus sequences with BLASTn against RefSeq non-redundant database (BLAST)
+ 6. Produce summary results of the samples.
 
 ## Introduction
 
