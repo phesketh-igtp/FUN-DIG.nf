@@ -6,7 +6,7 @@ A Nextflow pipeline for analysis of ONT-amplicon reads for the classification of
 
 The workflow is as follows:
 1. Concatenate the reads into a single file (if the MinION data path is provided)
- 2. Filter read to retain high-quality reads (default: Quality-score > 10, 97% accuracy) (seqkit)
+ 2. Filter read to retain high-quality reads (default: Quality-score > 15, SeqKit2)
  3. Cluster reads at 90% nucleotide identity (VSEARCH)
  4. Generate consensus for each cluster centroid (Medaka, MiniMap2, SAMtools)
  5. Taxonomically classify consensus sequences with BLASTn against RefSeq non-redundant database (BLAST)
