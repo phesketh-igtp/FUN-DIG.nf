@@ -50,5 +50,4 @@ conda activate fungal-18S
 ################################################################################
 
 #······· Main ········#
-
 vsearch --cluster_fast ${INPUT} --id ${PAIRWISEID} --strand both --clusters vsearch/${OUTPUT}

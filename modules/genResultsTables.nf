@@ -11,7 +11,8 @@ process genResultsTables {
     script:
 
     """
-        Rscript ${params_scriptDir}/R/compile_blasn-results
+        Rscript ${params_scriptDir}/R/summarise_blasn-results.R
+        
     """
 
 }
