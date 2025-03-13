@@ -1,6 +1,8 @@
 # FUN-DIG.nf: Fungal diagnostics using ONT sequencing technology
 
-A Nextflow pipeline for analysis of ONT-amplicon reads for the classification of fungal strains.
+### Introduction
+
+A Nextflow pipeline for analysis of ONT-amplicon reads for the classification of fungal strains.This workflow has only been tested on data generated on R.10 ONT flowcells, sequenced on a Mk1D MinION.
 
 The workflow is as follows:
 1. Concatenate the reads into a single file (if the MinION data path is provided)
@@ -10,15 +12,13 @@ The workflow is as follows:
  5. Taxonomically classify consensus sequences with BLASTn against RefSeq non-redundant database (BLAST)
  6. Produce summary results of the samples.
 
-## Introduction
+### Instalation
 
-## Instalation
+### Test data
 
-## Test data
+### Troubleshooting
 
-## Troubleshooting
-
-## Citations
+### Citations
 
 Please cite the following studies if you have utilised this workflow.
 
