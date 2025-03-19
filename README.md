@@ -30,4 +30,7 @@ Please cite the following studies if you have utilised this workflow.
 
 ### To do
 
-- Download the data used in the Ohta paper -> extract the expected regions from the genomes -> create the blastn database. make available to the github
+1. Download the data used in the Ohta paper -> extract the expected regions from the genomes -> create the blastn database. make available to the github
+2. Download the Ohtah data, subset and test with workflow
+3. Prepare a test dataset using the Ohta data
+4. Enable workflow for docker/apptainer 
