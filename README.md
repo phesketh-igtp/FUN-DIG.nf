@@ -27,3 +27,7 @@ Please cite the following studies if you have utilised this workflow.
 - [Rognes *et al.,* (2016) "*VSEARCH: a versatile open source tool for metagenomics*"](https://peerj.com/articles/2584/)
 - [PoreChop: adapter trimmer for Oxford Nanopore reads ](https://github.com/rrwick/Porechop)
 - [Medaka: Sequence correction provided by ONT Research](https://github.com/nanoporetech/medaka)
+
+### To do
+
+- Download the data used in the Ohta paper -> extract the expected regions from the genomes -> create the blastn database. make available to the github
