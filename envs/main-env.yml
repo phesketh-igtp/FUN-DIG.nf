@@ -1,0 +1,9 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - bioconda::seqkit=2.10.0
+  - bioconda::medaka=2.0.1
+  - bioconda::blast=2.16.0
+  - bioconda::vsearch=2.30.0
+  - bioconda::porechop=0.2.4
