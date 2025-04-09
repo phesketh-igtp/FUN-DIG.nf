@@ -105,19 +105,19 @@ nextflow.enable.dsl = 2
         runConcatenateFastQ.out.concatened_fq.view()
 
     // Perform ReadQC
-        runReadQC( rrunConcatenateFastQ.out.concatened_fq )
+        runReadQC( runConcatenateFastQ.out.concatened_fq )
 
     // Cluster reads 
-        runReadClustering(runReadQC.out.trimmed_reads_ch)
+        //runReadClustering(runReadQC.out.trimmed_reads_ch)
 
     // Generate consensus sequences
-        runGenConsensus(runReadClustering.out.clustered_reads_ch)
+        //runGenConsensus(runReadClustering.out.clustered_reads_ch)
 
     // Taxonomically classify conensus sequences
-        runConsensusTax(runGenConsensus.out.conensus_sequences_ch)
+        //runConsensusTax(runGenConsensus.out.conensus_sequences_ch)
 
     // Compile results summary
-        genResultsTables(runConsensusTax.out.blastn_out_ch)
+        //genResultsTables(runConsensusTax.out.blastn_out_ch)
 
     // Version control
 

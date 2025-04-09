@@ -17,8 +17,9 @@ process runConcatenateFastQ {
     
     input:
         tuple val(barcode), 
-                path(sampleID),
+                val(sampleID),
                 val(type)
+        path(fastq_pass)
 
     output:
         tuple val(sampleID),
@@ -28,7 +29,7 @@ process runConcatenateFastQ {
     script:
         """
         # Concatenate FASTQ files
-            cat ${params.fastq_pass}/${barcode}/*fastq.gz > "${sampleID}.fastq.gz"
+            cat ${fastq_pass}/${barcode}/*fastq.gz > "${sampleID}.fastq.gz"
         """
 
 }
