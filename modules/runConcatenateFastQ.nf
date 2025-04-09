@@ -12,8 +12,6 @@ process runConcatenateFastQ {
 */
 
     tag "$sampleID"
-
-    conda params.main_env
     
     input:
         tuple val(barcode), 

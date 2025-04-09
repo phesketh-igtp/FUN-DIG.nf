@@ -2,23 +2,25 @@ process runReadClustering {
 
     tag "${sampleID}"
 
-    conda params.main_env
+    conda "bioconda::vsearch=2.30.0"
     
     input:
         tuple val(sampleID),
-                path(reads),
-                path(qc_reads)
+                val(type),
+                path(reads)
 
     output:
         tuple val(sampleID),
-                path(reads),
-                path("${sampleID}.clusters.fasta"), emit: clustered_reads_ch
+            val(type),
+            path(reads),
+            path("${sampleID}.clusters.fasta"),
+            path("${sampleID}.clusters.txt"), emit: clustered_reads_ch
 
     script:
 
         """
         # Cluster qc reads into centroids
-            vsearch --cluster_fast \\
+            vsearch --cluster_fast ${reads} \\
                     --id ${params.clusteringPerc} \\
                     --strand both \\
                     --clusters ${sampleID}.clusters.txt \\

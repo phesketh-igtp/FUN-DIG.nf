@@ -23,12 +23,14 @@ nextflow.enable.dsl = 2
     /*
         IMPORT MODULES
     */
-    include { runConcatenateFastQ   }   from './modules/runConcatenateFastQ.nf'
-    include { runReadQC             }   from './modules/runReadQC.nf'
-    include { runReadClustering     }   from './modules/runReadClustering.nf'
-    include { runGenConsensus       }   from './modules/runGenConsensus.nf'
-    include { runConsensusTax       }   from './modules/runConsensusTax.nf'
-    include { genResultsTables      }   from './modules/genResultsTables.nf'
+
+    include { runConcatenateFastQ }   from './modules/runConcatenateFastQ.nf'
+    include { runTrimBarcodes     }   from './modules/runTrimBarcodes.nf'
+    include { runReadQC           }   from './modules/runReadQC.nf'
+    include { runReadClustering   }   from './modules/runReadClustering.nf'
+    include { runGenConsensus     }   from './modules/runGenConsensus.nf'
+    include { runConsensusTax     }   from './modules/runConsensusTax.nf'
+    include { genResultsTables    }   from './modules/genResultsTables.nf'
 
     /*
     ······································································································
@@ -100,24 +102,22 @@ nextflow.enable.dsl = 2
 
     // Concatenate reads and rename (if the samplesheet has been provided)
         runConcatenateFastQ( samples_ch, params.fastq_pass )
-    
-        // You can now use the concatenated_fastq channel in subsequent processes
-        runConcatenateFastQ.out.concatened_fq.view()
 
-    // Perform ReadQC
-        runReadQC( runConcatenateFastQ.out.concatened_fq )
+    // Perform adaptor trimming and QC
+        runTrimBarcodes( runConcatenateFastQ.out.concatened_fq )
+        runReadQC( runTrimBarcodes.out.trimmed_reads_ch )
 
     // Cluster reads 
-        //runReadClustering(runReadQC.out.trimmed_reads_ch)
+        runReadClustering( runReadQC.out.qc_reads_ch )
 
     // Generate consensus sequences
-        //runGenConsensus(runReadClustering.out.clustered_reads_ch)
+        runGenConsensus( runReadClustering.out.clustered_reads_ch )
 
     // Taxonomically classify conensus sequences
-        //runConsensusTax(runGenConsensus.out.conensus_sequences_ch)
+        //runConsensusTax( runGenConsensus.out.conensus_sequences_ch )
 
     // Compile results summary
-        //genResultsTables(runConsensusTax.out.blastn_out_ch)
+        //genResultsTables( runConsensusTax.out.blastn_out_ch )
 
     // Version control
 

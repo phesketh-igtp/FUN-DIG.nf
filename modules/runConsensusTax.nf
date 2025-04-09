@@ -6,11 +6,20 @@ process runConsensusTax {
     
     input:
         tuple val(sampleID),
-                path(consensus)
+            val(type),
+            path(reads),
+            path(centroids),
+            path(centroids_file),
+            path(consensus)
 
     output:
         tuple val(sampleID),
-                path("${sampleID}.blastn.out")
+            path(reads),
+            val(type),
+            path(centroids),
+            path(centroids_file),
+            path(consensus),
+            path("${sampleID}.blastn.out")
 
     script:
 

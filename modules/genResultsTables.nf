@@ -4,7 +4,12 @@ process genResultsTables {
 
     input:
         tuple val(sampleID),
-            path(blastn)
+            path(reads),
+            val(type),
+            path(centroids),
+            path(centroids_file),
+            path(consensus),
+            path(blastn_out)
 
     output:
         path("${sampleID}.tax.csv")

@@ -2,30 +2,26 @@ process runReadQC {
 
     tag "${sampleID}"
 
-    conda params.main_env
-    
+    conda "bioconda::nanofilt=2.3.0"
+
     input:
-        tuple val(sampleID), 
+        tuple val(sampleID),
+                val(type),
                 path(reads)
+
 
     output:
         tuple val(sampleID),
-                path(reads),
-                path("${sampleID}.qcreads.fastq.gz"), emit: trimmed_reads_ch
+                val(type),
+                path("${sampleID}.qcreads.2.fastq.gz"), emit: qc_reads_ch
 
     script:
     
         """
-        # Use porechop to remove known ONT adaptors
-            porechop -i ${reads} \\
-                    -o ${sampleID}.qcreads.1.fastq.gz \\
-                    --verbosity 2 
-
         # Use NanoFilt to trim or remove reads with a quality less than minimum quality parameter
-            zcat ${sampleID}.qcreads.1.fastq.gz \\
-                | NanoFilt -q ${params.minQVal} \\
+            zcat ${reads} | NanoFilt -q ${params.minQVal} \\
                     --headcrop ${params.headCrop} \\
                     --tailcrop ${params.tailCrop} \\
-                    > ${sampleID}.qcreads.fastq.gz
+                    > ${sampleID}.qcreads.2.fastq.gz
         """
 }
