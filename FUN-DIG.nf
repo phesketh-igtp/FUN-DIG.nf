@@ -72,6 +72,9 @@ nextflow.enable.dsl = 2
     ······································································································
     */
 
+    params.samplesheet = null
+    params.fastq_pass = null
+
     workflow {
 
         def color_purple = '\u001B[35m'
@@ -80,26 +83,29 @@ nextflow.enable.dsl = 2
         def color_reset  = '\u001B[0m'
         def color_cyan   = '\u001B[36m'
 
-    // Create channel with the paths to each directory containing fastQs
+    // Define the parameter for the samplesheet
+
+
+    // Create the channel from the samplesheet
         Channel
-            .fromPath("${params.readsPath}/*", type: 'dir')
-            .map { dir ->
-                def sampleID = dir.name
-                def reads = file("${dir}/*.fastq*")
-                return tuple(sampleID, reads)
-            }
+            .fromPath(params.samplesheet)
+            .splitCsv(header:true)
+            .map { row -> tuple(row.barcode, row.sampleID, row.type) }
             .set { samples_ch }
 
-        samples_ch.view()
+    // Validate that the samplesheet was provided
+        if (params.samplesheet == null) {
+            error "Please provide a samplesheet with the --samplesheet parameter"
+        }
 
     // Concatenate reads and rename (if the samplesheet has been provided)
-        runConcatenateFastQ(samples_ch, params.samplesheet)
+        runConcatenateFastQ( samples_ch, params.fastq_pass )
     
         // You can now use the concatenated_fastq channel in subsequent processes
-        runConcatenateFastQ.out.concatenated_fastq.view()
+        runConcatenateFastQ.out.concatened_fq.view()
 
     // Perform ReadQC
-        runReadQC(runConcatenateFastQ.out.concatenated_fastq)
+        runReadQC( rrunConcatenateFastQ.out.concatened_fq )
 
     // Cluster reads 
         runReadClustering(runReadQC.out.trimmed_reads_ch)

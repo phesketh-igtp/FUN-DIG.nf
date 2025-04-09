@@ -1,6 +1,8 @@
 process runReadClustering {
 
     tag "${sampleID}"
+
+    conda params.main_env
     
     input:
         tuple val(sampleID),

@@ -1,5 +1,6 @@
 process genResultsTables {
 
+    conda params.main_R_env
 
     input:
         tuple val(sampleID),
