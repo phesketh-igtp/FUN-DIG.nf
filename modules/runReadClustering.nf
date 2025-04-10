@@ -26,6 +26,12 @@ process runReadClustering {
                     --clusters ${sampleID}.clusters.txt \\
                     --centroids ${sampleID}.clusters.fasta \\
                     --threads ${params.cpu}
+
+        # Concatenate all the cluster files into a single file and remove
+        ## the individuals
+            cat ${sampleID}.clusters.txt* > tmp.${sampleID}.clusters.txt
+            rm ${sampleID}.clusters.txt*
+            mv tmp.${sampleID}.clusters.txt ${sampleID}.clusters.txt
         """
 
 }
