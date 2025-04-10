@@ -1,4 +1,4 @@
-process runTrimBarcodes {
+process runTrimAdaptors {
 
     tag "${sampleID}"
 

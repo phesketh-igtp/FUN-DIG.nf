@@ -25,7 +25,7 @@ nextflow.enable.dsl = 2
     */
 
     include { runConcatenateFastQ }   from './modules/runConcatenateFastQ.nf'
-    include { runTrimBarcodes     }   from './modules/runTrimBarcodes.nf'
+    include { runTrimAdaptors     }   from './modules/runTrimAdaptors.nf'
     include { runReadQC           }   from './modules/runReadQC.nf'
     include { runReadClustering   }   from './modules/runReadClustering.nf'
     include { runGenConsensus     }   from './modules/runGenConsensus.nf'
@@ -85,6 +85,19 @@ nextflow.enable.dsl = 2
         def color_reset  = '\u001B[0m'
         def color_cyan   = '\u001B[36m'
 
+    log.info """
+    ${color_purple}
+    ==============================================================${color_red}
+        ▗▄▄▄▖▗▖ ▗▖▗▖  ▗▖  ▗▄▄▄  ▗▄▄▄▖ ▗▄▄▖
+        ▐▌   ▐▌ ▐▌▐▛▚▖▐▌  ▐▌  █   █  ▐▌   
+        ▐▛▀▀▘▐▌ ▐▌▐▌ ▝▜▌▄▄▐▌  █   █  ▐▌▝▜▌
+        ▐▌   ▝▚▄▞▘▐▌  ▐▌  ▐▙▄▄▀ ▗▄█▄▖▝▚▄▞▘ ${color_cyan}v.${params.version}${color_purple}
+    ==============================================================${color_green}
+    FUN-DIG.nf: A Nextflow pipeline for analysis of ONT-amplicon 
+            reads for the classification of fungal strains.${color_purple}
+    ==============================================================${color_reset}
+    """
+
     // Define the parameter for the samplesheet
 
 
@@ -104,8 +117,8 @@ nextflow.enable.dsl = 2
         runConcatenateFastQ( samples_ch, params.fastq_pass )
 
     // Perform adaptor trimming and QC
-        runTrimBarcodes( runConcatenateFastQ.out.concatened_fq )
-        runReadQC( runTrimBarcodes.out.trimmed_reads_ch )
+        runTrimAdaptors( runConcatenateFastQ.out.concatened_fq )
+        runReadQC( runTrimAdaptors.out.trimmed_reads_ch )
 
     // Cluster reads 
         runReadClustering( runReadQC.out.qc_reads_ch )

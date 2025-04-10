@@ -26,8 +26,7 @@ process runGenConsensus {
                 medaka_consensus \\
                         -d ${centroids} \\
                         -i ${reads} \\
-                        -o ${sampleID}.cns.fasta \\
-                        -m ${params.medaka_model}
+                        -o ${sampleID}.cns.fasta
         """
 
 }
